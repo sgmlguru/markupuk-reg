@@ -1,0 +1,114 @@
+<config>
+    <!-- This is a MUK Registration app config file -->
+    
+    <!-- Company info -->
+    <business>
+        <name>Markup UK Conferences Limited</name>
+        <email></email>
+        
+        <!-- PayPal ID -->
+        <pid>FKGCXR4JVW89A</pid>
+        
+        <!-- Bank info -->
+        <bank>HSBC</bank>
+        <account>1234567890</account>
+        
+        <!-- PayPal client IDs for sandbox and live -->
+        <client-id>
+            <sandbox></sandbox>
+            <live></live>
+        </client-id>
+    </business>
+    
+    <!-- eXist-DB Domain (i.e. http://localhost:8080) -->
+    <domain></domain>
+    
+    <!-- Data root for MUK-data and subcollections -->
+    <data-root>/db</data-root>
+    
+    <!-- Various registration info collections in eXist -->
+    <collections>
+        <root>MUK-data</root>
+        
+        <!-- Test and live envs -->
+        <sandbox>sandbox</sandbox>
+        <live>live</live>
+        
+        <!-- These are child collections in sandbox and live -->
+        <sub>
+            <tmp>tmp</tmp>
+            <transactions>transactions</transactions>
+            <data>data</data>
+            <pdf>pdf</pdf>
+        </sub>
+    </collections>
+    
+    <!-- Current env (DO NOT EDIT) -->
+    <current>live</current>
+    
+    <!-- The currently *selected* path (live or sandbox, basically)  (DO NOT EDIT) -->
+    <data-uri>/db/MUK-data/live</data-uri>
+    
+    <stylesheets>
+        <!-- Invoice XSL-FO -->
+        <fo>/db/apps/MUK-reg/xsl/invoice.xsl</fo>
+        
+        <!-- Registration info summary XSLT for the payment page -->
+        <summary>/db/apps/MUK-reg/xsl/summary.xsl</summary>
+    </stylesheets>
+    
+    <prefixes>
+        <!-- Invoice numbering prefix -->
+        <invoice>MUK2019-REG-</invoice>
+        
+        <!-- User ID (currently not used) -->
+        <uid/>
+    </prefixes>
+    
+    <!-- Pricing (the VAT inclusive amounts in @inc are filled in using the admin XForm; the XForm calculates the @exc value) -->
+    <!-- <name> used in the XForm select displayed values; edit here if needed -->
+    <!-- <value> used as XForms lookup values -->
+    <pricing>
+        
+        <types>
+            <type use="true" inc="204" exc="170">
+                <name>Student (£204 incl VAT)</name>
+                <value>academic</value>
+            </type>
+            
+            <type use="false" inc="258" exc="215">
+                <name>Early Bird (£258 incl VAT)</name>
+                <value>early-bird</value>
+            </type>
+            
+            <type use="true" inc="336" exc="280">
+                <name>Full (£336 incl VAT)</name>
+                <value>full</value>
+            </type>
+            <type use="true" inc="204" exc="170">
+                <name>Programme Committee Member (£204 incl VAT)</name>
+                <value>pc</value>
+            </type>
+            <type use="true" inc="0" exc="0">
+                <name>Speaker (£0 incl VAT)</name>
+                <value>speaker</value>
+            </type>
+        </types>
+        
+        <!-- Discounts (DO NOT EDIT; all of this edited using the admin XForm) -->
+        <discounts>
+            <discount use="false" inc="243" exc="203">
+                <label>PRAHA4MUK19</label>
+            </discount>
+            <discount use="true" inc="1.5" exc="1.25">
+                <label>FINALCOUNTDOWN</label>
+            </discount>
+            <discount use="false" inc="303" exc="252.5">
+                <label>KARNOV-MUK2019</label>
+            </discount>
+            
+        </discounts>
+        
+    </pricing>
+    
+</config>

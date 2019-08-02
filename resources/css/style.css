@@ -1,0 +1,85 @@
+      /* CSS for XForms input field alignment */
+
+@namespace xf url("http://www.w3.org/2002/xforms");
+
+/* give the input form labels and the fieldset legend a bold sans-serif font */
+label, legend {
+   font-family: Arial, Helvetica, sans-serif;
+   font-weight: bold;
+}
+
+/* give the fieldset some breathing room */
+/*fieldset {
+   margin-left: 30px;
+   margin-top: 30px;
+   padding: 10px;
+   width: 260px;
+}*/
+
+/* the labels are right-aligned in a 150px wide column */
+xf|label {
+   width: 150px;
+   margin: 3px;
+}
+
+/* the input values are left aligned */
+xf|value {
+   text-align: left;
+}
+
+/* vertical area between input boxes */
+input {
+   margin: .2em;	
+}
+
+/* each group is our table */
+xf|group {
+   display: table;
+}
+
+/* each input is a row in the group table */
+xf|input {
+   display: table-row;
+}
+
+/* each label within an input is a cell in the input row */
+xf|input xf|label {
+   display: table-cell;	
+}
+
+xf|itemset xf|label {
+   margin-left: 10px
+}
+
+/* each value (pseudo-element) is also a cell in the input row */
+xf|input::value {
+   display: table-cell;
+}
+
+xf|help {
+  margin: 10px;
+}
+
+p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.9em;
+}
+
+.wait {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2em;
+}
+
+.debug {
+  font-family: Courier, serif;
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+.app {
+  margin-top: 40px; 
+  border-style: solid; 
+  border-width: 2px; 
+  padding: 10px;
+  width: 350px;
+}

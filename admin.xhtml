@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="../xsltforms/xsltforms.xsl" type="text/xsl"?><?xml-model href="http://www.oxygenxml.com/1999/xhtml/xhtml-xforms.nvdl" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:my="test" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <meta:meta xmlns:meta="http://www.xsmiles.org/2002/metadata" name="XForms Controls" description="Tests all XForms controls in single document"/>
+  <head>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="resources/img/MUK-Logo.png"/>
+    
+    <title>MUK 2019 Admin</title>
+    
+    <!--<link type="text/css" href="resources/css/style.css"/>-->
+    
+    <style type="text/css">
+            /* CSS for XForms input field alignment */
+
+@namespace xf url("http://www.w3.org/2002/xforms");
+
+/* give the body some breathing room */
+body {
+   margin-left: 40px;
+   margin-top: 40px;
+   padding: 20px;
+   width: 700px;
+}
+
+/* give the input form labels and the fieldset legend a bold sans-serif font */
+label, legend {
+   font-family: Arial, Helvetica, sans-serif;
+   font-weight: bold;
+}
+
+/* give the fieldset some breathing room */
+fieldset {
+   margin-left: 30px;
+   margin-top: 30px;
+   padding: 10px;
+   width: 400px;
+}
+
+/* the labels are right-aligned in a 150px wide column */
+xf|label {
+   width: 150px;
+   margin: 3px;
+}
+
+/* the input values are left aligned */
+xf|value {
+   text-align: left;
+}
+
+/* vertical area between input boxes */
+input {
+   margin: .5em;	
+}
+
+/* each group is our table */
+xf|group {
+   display: table;
+}
+
+/* each input is a row in the group table */
+xf|input {
+   display: table-row;
+}
+
+xf|select1 {
+  display: table-row;
+}
+
+xf|select1 xf|label {
+   display: table-cell;
+}
+
+/* each label within an input is a cell in the input row */
+xf|input xf|label {
+   display: table-cell;	
+}
+
+xf|itemset xf|label {
+   margin-left: 10px
+}
+
+/* each value (pseudo-element) is also a cell in the input row */
+xf|input::value {
+   display: table-cell;
+}
+
+xf|help {
+  font-size: 8pt;
+  margin: 10px;
+}
+
+xf|select1 xf|value {
+  margin-left: 6px;
+}
+
+.register {
+  margin-top: 30px;
+}
+
+.img {
+  margin-bottom: 20px;
+}
+
+.regtype {
+  margin-top: 30px;
+}
+
+.country {
+  margin-top: 7px;
+  margin-bottom: 20px;
+}
+
+.discount {
+  margin-top: 30px;
+}
+
+p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.9em;
+}
+
+.wait {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2em;
+}
+
+.debug {
+  font-family: Courier, serif;
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+.app {
+  margin-top: 40px; 
+  border-style: solid; 
+  border-width: 2px; 
+  padding: 10px;
+  width: 350px;
+}
+
+.admin-group {
+  margin-top: 40px; 
+  border-style: solid; 
+  border-width: 2px; 
+  padding: 10px;
+  width: 500px;
+}
+
+
+/* Display for the selected line */
+.xf-repeat-index input {
+   color: white;
+   background-color: gray;
+}
+
+    </style>
+    
+    <xf:model>
+      <xf:instance id="muk-data" src="resources/xml/config.xml"/>
+      
+      <xf:submission id="read-file" method="get" action="resources/xml/config.xml" replace="instance" instance="muk-data"/>
+      
+      <!-- Data root -->
+      <xf:bind id="data-root" nodeset="/config/data-root"/>
+      
+      <!-- Add/update data root in config, create collections according to config -->
+      <xf:submission id="init-data-root" action="xq/init-data-root.xquery" method="post" replace="none" instance="muk-data" ref="/config/data-root"/>
+      
+      <!-- Data subcollections -->
+      <xf:bind id="muk-data-root" nodeset="/config/collections/root"/>
+      <xf:bind id="muk-data-sandbox" nodeset="/config/collections/sandbox"/>
+      <xf:bind id="muk-data-live" nodeset="/config/collections/live"/>
+      <xf:bind id="muk-data-tmp" nodeset="/config/collections/sub/tmp"/>
+      <xf:bind id="muk-data-transactions" nodeset="/config/collections/sub/transactions"/>
+      <xf:bind id="muk-data-data" nodeset="config/collections/sub/data"/>
+      <xf:bind id="muk-data-pdf" nodeset="/config/collections/sub/pdf"/>
+      
+      <!-- Standard pricing, GBP inc VAT -->
+      <xf:bind id="muk-data-full" nodeset="/config/pricing/types/type[value='full']/@inc"/>
+      <xf:bind id="muk-data-early-bird" nodeset="/config/pricing/types/type[value='early-bird']/@inc"/>
+      <xf:bind id="muk-data-academic" nodeset="/config/pricing/types/type[value='academic']/@inc"/>
+      <xf:bind id="muk-data-pc" nodeset="/config/pricing/types/type[value='pc']/@inc"/>
+      <xf:bind id="muk-data-speaker" nodeset="/config/pricing/types/type[value='speaker']/@inc"/>
+      
+      <!-- Standard pricing, GBP excl VAT -->
+      <xf:bind id="muk-data-full-exc" nodeset="/config/pricing/types/type[value='full']/@exc" calculate="/config/pricing/types/type[value='full']/@inc div 1.2"/>
+      <xf:bind id="muk-data-early-bird-exc" nodeset="/config/pricing/types/type[value='early-bird']/@exc" calculate="/config/pricing/types/type[value='early-bird']/@inc div 1.2"/>
+      <xf:bind id="muk-data-academic-exc" nodeset="/config/pricing/types/type[value='academic']/@exc" calculate="/config/pricing/types/type[value='academic']/@inc div 1.2"/>
+      <xf:bind id="muk-data-pc-exc" nodeset="/config/pricing/types/type[value='pc']/@exc" calculate="/config/pricing/types/type[value='pc']/@inc div 1.2"/>
+      <xf:bind id="muk-data-speaker-exc" nodeset="/config/pricing/types/type[value='speaker']/@exc" calculate="/config/pricing/types/type[value='speaker']/@inc div 1.2"/>
+      
+      
+      <xf:bind id="discount" nodeset="/config/pricing/discounts/discount"/>
+      
+      <!-- Discount, GBP excl VAT -->
+      <xf:bind id="discount-excl" nodeset="/config/pricing/discounts/discount[index(discount-repeat)]/@exc" calculate="/config/pricing/discounts/discount/@inc div 1.2"/>
+      
+      
+      <!-- Update pricing -->
+      <xf:submission id="update-pricing" action="xq/update-pricing.xquery" method="post" replace="none" instance="muk-data" ref="/config"/>
+      
+      
+      <!-- Update data URI -->
+      <xf:submission id="update-data-uri" action="xq/update-data-uri.xquery" method="post" replace="none" instance="muk-data" ref="/config"/>
+      
+      <!-- Current env -->
+      <xf:bind id="current-env" nodeset="/config/current"/>
+      
+      <!-- Data URI -->
+      <xf:bind id="update-env" nodeset="/config/data-uri" calculate="concat(instance('muk-data')//data-root,'/',instance('muk-data')//collections/root,'/',/config/current)"/>
+      
+      
+      <!-- eXist-DB Domain -->
+      <xf:bind id="muk-data-domain" nodeset="/config/domain"/>
+      
+      <!-- Update DB Domain -->
+      <xf:submission id="update-domain" action="xq/update-domain.xquery" method="post" replace="none" instance="muk-data" ref="/config"/>
+      
+      
+    </xf:model>
+    
+  </head>
+  
+  <body>
+    
+    <div class="img">
+      <h1><img src="resources/img/MUK-Logo.png" alt="Markup UK"/> Admin Page</h1>
+    </div>
+    
+    <p><a href="uid-reports.xhtml" target="_blank">Reports page</a></p>
+    
+    <div class="admin-group">
+      <xf:input bind="muk-data-domain" incremental="true">
+        <xf:label>eXist Domain</xf:label>
+        <xf:hint>For example, http://localhost:8080</xf:hint>
+      </xf:input>
+      
+      <div style="margin-top: 20px">
+        <xf:submit submission="update-domain">
+          <xf:label>Update</xf:label>
+        </xf:submit>
+      </div>
+    </div>
+    
+    <!-- Data root input form -->
+    <div class="admin-group">
+      <xf:group>
+        <xf:input bind="data-root" incremental="true">
+          <xf:label>MUK Data Root</xf:label>
+          <xf:hint>Add/update MUK app data root</xf:hint>
+        </xf:input>
+        
+        <div style="margin-top: 20px">
+          <xf:submit submission="init-data-root">
+            <xf:label>Update</xf:label>
+          </xf:submit>
+        </div>
+      </xf:group>
+    </div>
+    
+    <!-- MUK data subcollections -->
+    <div class="admin-group">
+      <xf:group>
+        <xf:input bind="muk-data-root" incremental="true">
+          <xf:label>MUK Data Collection</xf:label>
+        </xf:input>
+        <xf:input bind="muk-data-sandbox" incremental="true">
+          <xf:label>Sandbox</xf:label>
+        </xf:input>
+        <xf:input bind="muk-data-live" incremental="true">
+          <xf:label>Live</xf:label>
+        </xf:input>
+        <xf:input bind="muk-data-tmp" incremental="true">
+          <xf:label>Temp</xf:label>
+        </xf:input>
+        <xf:input bind="muk-data-transactions" incremental="true">
+          <xf:label>Transactions</xf:label>
+        </xf:input>
+        <xf:input bind="muk-data-data" incremental="true">
+          <xf:label>Registered Data</xf:label>
+        </xf:input>
+        <xf:input bind="muk-data-pdf" incremental="true">
+          <xf:label>PDF</xf:label>
+        </xf:input>
+        
+        <div style="margin-top: 20px">
+          <xf:submit submission="init-data-root">
+            <xf:label>Update Collection Names</xf:label>
+          </xf:submit>
+        </div>
+      </xf:group>
+    </div>
+    
+    <div class="admin-group">
+      <xf:group>
+        <xf:select1 bind="current-env" incremental="true">
+          <xf:label>Environment</xf:label>
+          <xf:item>
+            <xf:label>Sandbox</xf:label>
+            <xf:value>sandbox</xf:value>
+          </xf:item>
+          <xf:item>
+            <xf:label>Live</xf:label>
+            <xf:value>live</xf:value>
+          </xf:item>
+        </xf:select1>
+        
+        <div style="margin-top: 20px">
+          <xf:submit submission="update-data-uri">
+            <xf:label>Update Environment</xf:label>
+          </xf:submit>
+        </div>
+      </xf:group>
+    </div>
+    
+    <div class="admin-group">
+      <h3>Pricing in GBP Inc VAT</h3>
+      <xf:group>
+        <xf:input bind="muk-data-full" incremental="true">
+          <xf:label>Full</xf:label>
+        </xf:input>
+        <xf:input bind="muk-data-early-bird" incremental="true">
+          <xf:label>Early-bird</xf:label>
+        </xf:input>
+        <xf:input bind="muk-data-academic" incremental="true">
+          <xf:label>Academic</xf:label>
+        </xf:input>
+        <xf:input bind="muk-data-pc" incremental="true">
+          <xf:label>PC Member</xf:label>
+        </xf:input>
+        <xf:input bind="muk-data-speaker" incremental="true">
+          <xf:label>Speaker</xf:label>
+        </xf:input>
+      </xf:group>
+      
+      <xf:group ref="/config/pricing/discounts">
+        <fieldset style="margin-top: 15px; margin-bottom: 5px;">
+          <legend>Current Discounts</legend>
+          
+          <xf:repeat id="discount-repeat" nodeset="discount">
+            <xf:input ref="label" incremental="true">
+              <xf:label ref="label"/>
+            </xf:input>
+            <xf:input ref="@inc" incremental="true">
+              <xf:label ref="@inc"/>
+            </xf:input>
+            <xf:action ev:event="DOMActivate">
+              <xf:setvalue ref="@exc" value="/config/pricing/discounts/discount[index('discount-repeat')]/@inc div 1.2"/>
+            </xf:action>
+          </xf:repeat>
+          
+          <xf:trigger>
+            <xf:label>Add Row</xf:label>
+            <xf:action ev:event="DOMActivate">
+              <xf:insert nodeset="discount" at="index('discount-repeat')" position="after"/>
+              <xf:setvalue ref="discount[index('discount-repeat')]/label" value="/config/pricing/discounts/discount/label"/>
+              <xf:setvalue ref=".[index('person-repeat')]/@inc" value="/config/pricing/discounts/discount/@inc"/>
+              <xf:setvalue ref="@exc" value="/config/pricing/discounts/discount[index('person-repeat')]/@inc div 1.2"/>
+            </xf:action>
+          </xf:trigger>
+          
+          <xf:trigger>
+            <xf:label>Delete Selected Row</xf:label>
+            <xf:action ev:event="DOMActivate">
+              <xf:delete nodeset="//discount[index('discount-repeat')]"/>
+            </xf:action>
+          </xf:trigger>
+          
+        </fieldset>
+        
+        
+      </xf:group>
+      
+      <div style="margin-top: 20px">
+        <xf:submit submission="update-pricing">
+          <xf:label>Update Pricing</xf:label>
+        </xf:submit>
+      </div>
+    </div>
+    
+    
+    <div class="debug">
+      <xf:output value="serialize(instance('muk-data'),'yes')"/>
+    </div>
+  </body>
+</html>

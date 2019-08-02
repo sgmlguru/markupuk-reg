@@ -1,0 +1,320 @@
+<?xml-stylesheet href="../xsltforms/xsltforms.xsl" type="text/xsl"?><?xml-model href="http://www.oxygenxml.com/1999/xhtml/xhtml-xforms.nvdl" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?><html xmlns="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:my="test" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+  <meta:meta xmlns:meta="http://www.xsmiles.org/2002/metadata" name="XForms Controls" description=""/>
+  
+  <head>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="resources/img/MUK-Logo.png"/>
+    
+    <title>Markup UK Registration form</title>
+    
+    <style type="text/css">
+            /* CSS for XForms input field alignment */
+
+@namespace xf url("http://www.w3.org/2002/xforms");
+
+/* give the body some breathing room */
+body {
+   margin-left: 40px;
+   margin-top: 40px;
+   padding: 20px;
+   width: 500px;
+}
+
+/* give the input form labels and the fieldset legend a bold sans-serif font */
+label, legend {
+   font-family: Arial, Helvetica, sans-serif;
+   font-weight: bold;
+}
+
+/* give the fieldset some breathing room */
+/*fieldset {
+   margin-left: 30px;
+   margin-top: 30px;
+   padding: 10px;
+   width: 260px;
+}*/
+
+/* the labels are right-aligned in a 150px wide column */
+xf|label {
+   width: 150px;
+   margin: 3px;
+}
+
+/* the input values are left aligned */
+xf|value {
+   text-align: left;
+}
+
+/* vertical area between input boxes */
+input {
+   margin: .5em;	
+}
+
+/* each group is our table */
+xf|group {
+   display: table;
+}
+
+/* each input is a row in the group table */
+xf|input {
+   display: table-row;
+}
+
+xf|select1 {
+  display: table-row;
+}
+
+xf|select1 xf|label {
+   display: table-cell;
+}
+
+/* each label within an input is a cell in the input row */
+xf|input xf|label {
+   display: table-cell;	
+}
+
+xf|itemset xf|label {
+   margin-left: 10px
+}
+
+/* each value (pseudo-element) is also a cell in the input row */
+xf|input::value {
+   display: table-cell;
+}
+
+xf|help {
+  font-size: 8pt;
+  margin: 10px;
+}
+
+xf|select1 xf|value {
+  margin-left: 6px;
+}
+
+.register {
+  margin-top: 30px;
+}
+
+.img {
+  margin-bottom: 20px;
+}
+
+.regtype {
+  margin-top: 30px;
+}
+
+.country {
+  margin-top: 7px;
+  margin-bottom: 20px;
+}
+
+.discount {
+  margin-top: 30px;
+}
+
+p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.9em;
+}
+
+.wait {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2em;
+}
+
+.debug {
+  font-family: Courier, serif;
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+.app {
+  margin-top: 40px; 
+  border-style: solid; 
+  border-width: 2px; 
+  padding: 10px;
+  width: 350px;
+}
+
+    </style>
+    
+    <xf:model>
+      <xf:instance id="data">
+        <data xmlns="">
+          <person>
+            <name/>
+            <address>
+              <line1/>
+              <line2/>
+              <postcode/>
+              <city/>
+              <country/>
+              <eu>false</eu>
+            </address>
+            <affiliation/>
+            <reverse-charge>false</reverse-charge>
+            <vat-number/>
+            <dietary/>
+            <!--<other/>-->
+            <email/>
+            <preconf/>
+            <mailing-list>false</mailing-list>
+            <type/>
+            <discount/>
+          </person>
+        </data>
+      </xf:instance>
+      
+      <xf:instance id="config" src="resources/xml/config.xml"/>
+      
+      <xf:instance id="countries" src="resources/xml/countries.xml"/>
+      
+      <xf:bind id="name" nodeset="person/name" required="true()"/>
+      <xf:bind id="line1" nodeset="person/address/line1"/>
+      <xf:bind id="line2" nodeset="person/address/line2"/>
+      <xf:bind id="postcode" nodeset="person/address/postcode"/>
+      <xf:bind id="city" nodeset="person/address/city"/>
+      <xf:bind id="country" nodeset="person/address/country" required="true()"/>
+      <xf:bind nodeset="person/address/eu" calculate="instance('countries')//country[.=instance('data')/person/address/country]/@eu"/>
+      <xf:bind id="affiliation" nodeset="person/affiliation"/>
+      <xf:bind id="reverse-charge" nodeset="person/reverse-charge" type="xs:boolean"/>
+      <xf:bind id="vat-number" nodeset="person/vat-number" required="../reverse-charge='true'"/>
+      <xf:bind id="dietary" nodeset="person/dietary"/>
+      <!--<xf:bind id="other" nodeset="person/other"/>-->
+      <xf:bind id="type" nodeset="person/type" required="true()"/>
+      <xf:bind id="discount" nodeset="person/discount"/>
+      <xf:bind id="email" nodeset="person/email" required="true()" type="email"/>
+      <xf:bind id="preconf" nodeset="person/preconf" type="xs:boolean" required="true()"/>
+      <xf:bind id="mailing-list" nodeset="person/mailing-list" type="xs:boolean"/>
+      
+      <xf:submission id="save" method="post" replace="all" action="xq/register.xquery" instance="data" ref="/data"/>
+      
+      <xf:action ev:event="xforms-ready">
+        <xf:setfocus control="first"/>
+      </xf:action>
+    </xf:model>
+    
+  </head>
+  
+  <body>
+    <div>
+      
+      <div class="img">
+        <img src="resources/img/MUK-Logo.png" alt="Markup UK"/>
+      </div>
+      
+      <xf:group>
+        <xf:input incremental="true" bind="name" id="first">
+          <xf:label>Name</xf:label>
+          <xf:alert>Required field</xf:alert>
+        </xf:input>
+        
+        <xf:input incremental="true" bind="affiliation">
+          <xf:label>Affiliation</xf:label>
+        </xf:input>
+        
+        <xf:input incremental="true" bind="line1">
+          <xf:label>Address Line 1</xf:label>
+        </xf:input>
+        
+        <xf:input incremental="true" bind="line2">
+          <xf:label>Address Line 2</xf:label>
+        </xf:input>
+        
+        <xf:input incremental="true" bind="postcode">
+          <xf:label>Postcode</xf:label>
+        </xf:input>
+        
+        <xf:input incremental="true" bind="city">
+          <xf:label>City</xf:label>
+        </xf:input>
+        
+        <div class="country">
+          <xf:select1 incremental="true" bind="country" appearance="minimal">
+            <xf:label>Country</xf:label>
+            <xf:alert>Required field</xf:alert>
+            <xf:itemset nodeset="instance('countries')/country">
+              <xf:label ref="."/>
+              <xf:value ref="."/>
+            </xf:itemset>
+          </xf:select1>
+        </div>
+        
+        <xf:input incremental="true" bind="dietary">
+          <xf:label>Dietary requirements</xf:label>
+        </xf:input>
+        
+        <xf:input incremental="true" bind="email">
+          <xf:label>Email</xf:label>
+          <xf:alert>Required field</xf:alert>
+        </xf:input>
+        
+        <div class="preconf">
+            <xf:input bind="preconf" appearance="minimal">
+              <xf:label>Attend preconference</xf:label>
+              <xf:help>Check this box if you'd like to attend the preconference.</xf:help>
+            </xf:input>
+        <p>Preconference venue capacity is limited, so please tick here if you will be attending.</p>
+        </div>
+        
+        <xf:input bind="mailing-list" appearance="minimal">
+          <xf:label>Mailing list</xf:label>
+          <xf:help>Check this box if you'd like to receive occasional Markup UK-related updates via email. Should be quite rare.</xf:help>
+        </xf:input>
+        
+        <div class="regtype">
+          <xf:select1 incremental="true" bind="type" appearance="minimal">
+            <xf:label>Registration type</xf:label>
+            <xf:alert>Required field</xf:alert>
+            <xf:itemset nodeset="instance('config')//types/type[@use='true']" id="types">
+              <xf:label ref="name"/>
+              <xf:value ref="value"/>
+            </xf:itemset>
+          </xf:select1>
+          <p>Prices include UK VAT.</p>
+          
+          <xf:input bind="reverse-charge" appearance="minimal">
+            <xf:label>VAT registered</xf:label>
+            <xf:help>Check this box if you are a VAT-registered, EU corporate entity.</xf:help>
+          </xf:input>
+          
+          <xf:input bind="vat-number" incremental="true">
+            <xf:label>VAT number</xf:label>
+            <xf:help>VAT registration number</xf:help>
+          </xf:input>
+          
+          <p>Businesses and individuals outside the EU <strong>do not</strong> pay UK VAT.</p>
+          <p>For VAT-registered businesses within the EU, you <strong>must</strong> supply a valid VAT registration number.</p>
+          
+        </div>
+        
+      </xf:group>
+      
+      <div class="discount">
+        <xf:input incremental="true" bind="discount">
+          <xf:label>Discount code</xf:label>
+        </xf:input>
+      </div>
+      
+      
+      <br/>
+      
+      <div class="register">
+        <xf:submit submission="save">
+          <xf:label>Register</xf:label>
+        </xf:submit>
+      </div>
+      
+    </div>
+    
+    <br/>
+    
+    
+    <!--<div class="debug">
+      <xf:output value="serialize(instance('data'),'yes')"/>
+    </div>-->
+    
+  </body>
+</html>
