@@ -204,6 +204,13 @@ The configuration XML format updated by the `admin.xhtml` XForm looks like this:
 The registration prices are entered in the XForm and saved in `type/@inc` and `discount/@inc`, respectively, and should be VAT inclusive. The XForm calculates the VAT exclusive values in `@exc`.
 
 
+## Registration Confirmation
+
+Currently, the email text is hard-coded in a function in `modules/MUK-functions.xqm`. This, of course, needs to change so the function can simply use a given email in, say, a config file handling the specifics of a particular use of the app.
+
+Similarly, there is still hard-coded stuff in `xq/thanks.xquery` that needs to be moved.
+
+
 ## Bypassing Paypal Invoicing for Multiple Delegate Registrations
 
 Sometimes, you need to invoice an organisation for multiple delegates in a single invoice. This is entirely doable by writing the temp XML file manually. For example, here is a temp XML for two delegates from OUP:
